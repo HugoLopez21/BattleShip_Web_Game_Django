@@ -6,7 +6,7 @@ Juego de **Hundir la Flota** multijugador accesible desde el navegador, desarrol
 
 Si tienes un usuario accede mediante la siguiente IP al proyectyo desplegado en un servidor aws con nginx y gunicorn.
 
-[Hundir la flota](13.222.117.222)
+[Hundir la flota](https://13.222.117.222)
 
 ---
 
