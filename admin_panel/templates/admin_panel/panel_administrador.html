@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel administrador</title>
+    <link rel="stylesheet" href="{% static 'css/general.css' %}">
+    <link rel="stylesheet" href="{% static 'admin_panel/css/admin.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+</head>
+
+<body>
+    <header>
+        <h1>PANEL DE ADMINISTRADOR</h1>
+        <p>Bienvenido, {{ request.user.username }}</p>
+    </header>
+
+    <section id="alta">
+        <h2>Alta de Usuario</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Crear Usuario</button>
+        </form>
+    </section>
+
+    <section id="modifica">
+        <h2>Lista de Usuarios</h2>
+        <div class="lista">
+            <div class="lista-usuarios">
+                <table class="lista_usuarios">
+                    <tr>
+                        <th>Username</th>
+                        <th>Nombre Completo</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for usuario in usuarios %}
+                        <tr>
+                            <td>{{ usuario.username }}</td>
+                            <td>{{ usuario.first_name }} {{ usuario.last_name }}</td>
+                            <td>
+                                <div class="acciones">
+                                    <a href="{% url 'admin_panel:editar_usuario' usuario.id %}" class="btn-editar"
+                                        title="Modificar">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+
+                                    {% if not usuario.is_superuser %}
+                                    <a href="{% url 'admin_panel:eliminar_usuario' usuario.id %}" class="btn-borrar"
+                                        title="Dar de baja"
+                                        onclick="return confirm('¿Estás seguro de que quieres eliminar a este usuario?');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
+                                    {% endif %}
+                                </div>
+
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" style="text-align: center;">No hay usuarios registrados</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section id="backup">
+        <h2>Buckup</h2>
+        <div class="contenido">
+            <form method="POST" action="{% url 'admin_panel:descargar_lista_usuarios' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn">Descargar lista de usuarios</button>
+            </form>
+            <div class="lista">
+                <table class="lista_usuarios">
+                    <tbody>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Jugador 1</th>
+                            <th>Jugador 2</th>
+                            <th>Ganador</th>
+                            <th>Descargar</th>
+                        </tr>
+                        </thead>
+                    <tbody>
+                        {% for partida in partidas %}
+                        <tr>
+                            <td>{{ partida.fecha }}</td>
+                            <td>{{ partida.jugador1}}</td>
+                            <td>{{ partida.jugador2}}</td>
+                            <td>{{ partida.ganador}}</td>
+                            <td>
+                                <form method="POST" action="{% url 'admin_panel:descargar_partida' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="partida_id" value="{{ partida.id }}">
+                                    <button type="submit" class="btn-icon">
+                                        <i class="fa-solid fa-download"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td>No hay partidas disputadas</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <form method="POST" action="{% url 'admin_panel:descargar_ranking' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn">Descragar Ranking</button>
+            </form>
+        </div>
+    </section>
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/general.css' %}">
+    <link rel="stylesheet" href="{% static 'inicial/css/login.css' %}">
+</head>
+
+<body>
+    <div class="login-container">
+        <h3>LOGIN</h3>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="login-btn">Iniciar sesión</button>
+        </form>
+        {% if form.errors %}
+        <p class="mensaje_error">Usuario o contraseña incorrectos</p>
+        {% endif %}
+    </div>
+</body>
+
+</html>

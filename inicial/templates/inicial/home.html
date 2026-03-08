@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/general.css' %}">
+    <link rel="stylesheet" href="{% static 'inicial/css/home.css' %}">
+
+</head>
+
+<body>
+    <header>
+        <p>Bienvenido {{ request.user.username }}</p>
+        <form method="post" action="{% url 'inicial:login' %}">
+            {% csrf_token %}
+            <button type="submit btn">Logout</button>
+        </form>
+    </header>
+    <section id="elegir_partida">
+        <h1>HUNDIR LA FLOTA</h1>
+        <div class="ranking">
+            <h3>Ranking de Jugadores</h3>
+            <div class="tabla-rank">
+                <div class="fila head">
+                    <p>Posición</p>
+                    <p>Usuario</p>
+                    <p>Victorias</p>
+                    <p>Derrotas</p>
+                    <p>Abandonos</p>
+                </div>
+
+                <div class="tabla-body">
+                    {% for perfil in ranking %}
+                    <div class="fila">
+                        <p>{{ forloop.counter }}</p>
+                        <p>{{ perfil.usuario.username }}</p>
+                        <p>{{ perfil.partidas_ganadas }}</p>
+                        <p>{{ perfil.partidas_perdidas }}</p>
+                        <p>{{ perfil.partidas_abandonadas }}</p>
+                    </div>
+                    {% empty %}
+                    <p>No hay datos disponibles en el ranking.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="contenido" id="modo_juego">
+            <h3>Elegir modo</h3>
+            <div id="elegir_modo">
+
+                <form action="{% url 'inicial:lobby' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden">
+                    <button type="submit" class="btn">Buscar otro Jugador</button>
+                </form>
+
+                <form action="{% url 'partida:iniciar' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="tipo" value="1">
+                    <button type="submit" class="btn">Jugar contra CPU</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

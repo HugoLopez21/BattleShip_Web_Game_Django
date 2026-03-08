@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar contrincante</title>
+    <link rel="stylesheet" href="{% static 'css/general.css' %}">
+    <link rel="stylesheet" href="{% static 'inicial/css/lobby.css' %}">
+</head>
+
+<body>
+    <header>
+        <p>Bienvenido {{ request.user.username }}</p>
+        <form method="post" action="{% url 'inicial:login' %}">
+            {% csrf_token %}
+            <button type="submit btn">Logout</button>
+        </form>
+    </header>
+    <div class="contenido">
+        <h2>Usuarios buscando partida:</h2>
+        <ul>
+            {% for usuario in usuarios_activos %}
+            <li>
+                <strong>{{ usuario.usuario }}</strong>
+                <button type="submit" onclick="retar('{{ usuario.id }}')" class="btn">Retar a una partida</button>
+            </li>
+            {% empty %}
+            <li>No hay otros usuarios activos en este momento.</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <script>
+        const csrftoken = "{{ csrf_token }}";
+        const rutaIniciarPartida = "{% url 'partida:iniciar' %}";
+    </script>
+    <script src="{% static 'inicial/js/lobby.js' %}"></script>
+
+</body>
+
+</html>

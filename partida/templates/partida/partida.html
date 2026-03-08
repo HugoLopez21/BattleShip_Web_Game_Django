@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partida</title>
+    <link rel="stylesheet" href="{% static 'partida/css/partida.css' %}">
+</head>
+
+<body>
+    <div class="contenido">
+        <h3 id="mensaje_partida"></h3>
+        <div class="contenido_tableros">
+            <div class="barcos_enemigos">
+
+            </div>
+            <div id="j1">
+                <h3 id="nombre_j1">{{ jugador1.nombre }}</h3>
+                <div class="tablero"></div>
+            </div>
+            <div id="j2">
+                <h3 id="nombre_j2">{{ jugador2.nombre }}</h3>
+                <div class="tablero"></div>
+            </div>
+        </div>
+        <form method="post" action="{% url 'partida:abandonar' %}">
+            {% csrf_token %}
+            <button type="submit" class="abandonar">Abandonar (Me cago)</button>
+        </form>
+    </div>
+    {{ jugador1|json_script:"datos-j1" }}
+    {{ barcos_enemigos|json_script:"barcos-enemigos" }}
+    <script>
+        const csrftoken = '{{ csrf_token }}';
+        const rutasImagenes = {
+            agua: "{% static 'partida/media/agua.png' %}",
+            barco: "{% static 'partida/media/barco.jpg' %}",
+            pregunta: "{% static 'partida/media/question.png' %}"
+        };
+    </script>
+    <script src="{% static 'partida/js/partida.js' %}"></script>
+</body>
+
+</html>

@@ -1,0 +1,48 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport">
+    <title>Editar Usuario</title>
+
+    <link rel="stylesheet" href="{% static 'css/general.css' %}">
+    <link rel="stylesheet" href="{% static 'admin_panel/css/admin.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>PANEL DE ADMINISTRADOR | EDITAR USUARIO</h1>
+        <a href="{% url 'admin_panel:panel_principal' %}">
+            <i class="fa-solid fa-arrow-left"></i> Volver al panel
+        </a>
+    </header>
+
+    <section id="editar-form">
+        <h2>Modificando a {{ usuario.username }}</h2>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="campos-formulario">
+                {{ form.as_p }}
+            </div>
+
+            <div class="botones-accion">
+                <button type="submit" class="btn-guardar">
+                    <i class="fa-solid fa-check"></i> Guardar Cambios
+                </button>
+
+                <a href="{% url 'admin_panel:panel_principal' %}" class="btn-cancelar">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </section>
+
+</body>
+
+</html>
